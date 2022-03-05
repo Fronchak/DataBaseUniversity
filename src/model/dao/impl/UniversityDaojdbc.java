@@ -2,19 +2,22 @@ package model.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
 import db.DBException;
 import model.dao.UniversityDao;
 import model.entities.University;
+import model.util.ImplementsEntities;
 
-public class UniversityDaojdbc implements UniversityDao{
+public class UniversityDaoJDBC implements UniversityDao{
 
 	private Connection conn;
 	
-	public UniversityDaojdbc(Connection conn) {
+	public UniversityDaoJDBC(Connection conn) {
 		this.conn = conn;
 	}
 	
@@ -53,8 +56,30 @@ public class UniversityDaojdbc implements UniversityDao{
 
 	@Override
 	public List<University> getAllUniversity() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<University> list = new ArrayList<>();
+		
+		try {
+			ps = conn.prepareStatement("SELECT "
+					+ "IDFACULDADE, "
+					+ "NOME, "
+					+ "UF "
+					+ "FROM FACULDADE");
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				list.add(ImplementsEntities.implementUniversity(rs));
+			}
+			return list;
+		}
+		catch(SQLException e) {
+			throw new DBException("Error in getAllUniversity: " + e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closePreparedStatement(ps);
+		}
+		
 	}
 
 	@Override
@@ -63,4 +88,6 @@ public class UniversityDaojdbc implements UniversityDao{
 		
 	}
 
+	
+	
 }

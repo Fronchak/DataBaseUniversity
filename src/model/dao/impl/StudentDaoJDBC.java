@@ -6,7 +6,7 @@ import model.dao.StudentDao;
 import model.entities.Student;
 import model.entities.University;
 
-public class StudentDaoImpl implements StudentDao {
+public class StudentDaoJDBC implements StudentDao {
 
 	@Override
 	public void insert(Student student) {

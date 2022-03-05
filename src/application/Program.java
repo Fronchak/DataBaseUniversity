@@ -1,5 +1,7 @@
 package application;
 
+import java.util.List;
+
 import db.DB;
 import db.DBException;
 import model.dao.DaoFactory;
@@ -12,8 +14,10 @@ public class Program {
 		
 		try {
 			UniversityDao universityDao = DaoFactory.getUniversityDao();
-			University university = new University("UTFPR","PR");
-			universityDao.insert(university);
+			//University university = new University("UTFPR","PR");
+			//universityDao.insert(university);
+			List<University> list = universityDao.getAllUniversity();
+			list.stream().forEach(System.out::println);
 			
 		}
 		catch(DBException e) {

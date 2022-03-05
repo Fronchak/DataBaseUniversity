@@ -1,12 +1,12 @@
 package model.dao;
 
 import db.DB;
-import model.dao.impl.UniversityDaojdbc;
+import model.dao.impl.UniversityDaoJDBC;
 
 public class DaoFactory {
 
 	public static UniversityDao getUniversityDao() {
-		return new UniversityDaojdbc(DB.getConnection());
+		return new UniversityDaoJDBC(DB.getConnection());
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -48,6 +49,17 @@ public class DB {
 			}
 		}
 		
+	}
+	
+	public static void closeResultSet(ResultSet rs) {
+		if(rs != null) {
+			try {
+				rs.close();
+			}
+			catch(SQLException e) {
+				throw new DBException("Error in closeResultSet: " + e.getMessage());
+			}
+		}
 	}
 	
 	private static Properties getProperties() {
