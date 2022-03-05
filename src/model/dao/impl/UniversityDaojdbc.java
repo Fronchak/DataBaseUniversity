@@ -44,22 +44,64 @@ public class UniversityDaoJDBC implements UniversityDao{
 
 	@Override
 	public void update(University university) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("UPDATE FACULDADE SET "
+					+ "NOME = ?, "
+					+ "UF = ? "
+					+ "WHERE IDFACULDADE = ?");
+			ps.setString(1,university.getName());
+			ps.setString(2, university.getUf());
+			ps.setInt(3, university.getId());
+			int rowsAffect = ps.executeUpdate();
+			if(rowsAffect == 0) {
+				throw new DBException("Unable to find id: " + university.getId());
+			}
+		}
+		catch(SQLException e) {
+			throw new DBException("Error in updateUniversity: " + e.getMessage());
+		}
+		finally {
+			DB.closePreparedStatement(ps);
+		}
 	}
 
 	@Override
 	public University findById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("SELECT "
+					+ "IDFACULDADE, "
+					+ "NOME, "
+					+ "UF "
+					+ "FROM FACULDADE "
+					+ "WHERE IDFACULDADE = ?");
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return ImplementsEntities.implementUniversity(rs);
+			}
+			else {
+				throw new DBException("Can't find this id: " + id);
+			}	
+		}
+		catch(SQLException e) {
+			throw new DBException("Error in findByID University: " + e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closePreparedStatement(ps);
+		}
 	}
 
 	@Override
 	public List<University> getAllUniversity() {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		List<University> list = new ArrayList<>();
-		
+		List<University> list = new ArrayList<>();	
 		try {
 			ps = conn.prepareStatement("SELECT "
 					+ "IDFACULDADE, "
@@ -79,15 +121,25 @@ public class UniversityDaoJDBC implements UniversityDao{
 			DB.closeResultSet(rs);
 			DB.closePreparedStatement(ps);
 		}
-		
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("DELETE FROM FACULDADE "
+					+ "WHERE IDFACULDADE = ?");
+			ps.setInt(1, id);
+			int rowsAffect = ps.executeUpdate();
+			if(rowsAffect == 0) {
+				throw new DBException("Unable to find this id: " + id);
+			}
+		}
+		catch(SQLException e ) {
+			throw new DBException("Error in DeleteUniversity: " + e.getMessage());
+		}
+		finally {
+			DB.closePreparedStatement(ps);
+		}
+	}	
 }
