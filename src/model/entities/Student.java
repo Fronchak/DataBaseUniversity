@@ -2,7 +2,7 @@ package model.entities;
 
 import java.util.Date;
 
-public class Students {
+public class Student {
 
 	private Integer id;
 	private String name;
@@ -10,10 +10,10 @@ public class Students {
 	private Date birthDate;
 	private University university;
 	
-	public Students(){
+	public Student(){
 	}
 
-	public Students(String name, String cpf, Date birthDate, University university) {
+	public Student(String name, String cpf, Date birthDate, University university) {
 		super();
 		this.name = name;
 		this.cpf = cpf;
@@ -21,7 +21,7 @@ public class Students {
 		this.university = university;
 	}
 
-	public Students(Integer id, String name, String cpf, Date birthDate, University university) {
+	public Student(Integer id, String name, String cpf, Date birthDate, University university) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -70,5 +70,9 @@ public class Students {
 		this.university = university;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return  "ID: " + id + ", Name: " + name + ", CPF: " + cpf + ", Birth Date: " + birthDate + 
+				", University: " + university;
+	}
 }

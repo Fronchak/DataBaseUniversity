@@ -5,7 +5,7 @@ public class University {
 	private Integer id;
 	private String name;
 	private String uf;
-	
+
 	
 	public University(){
 	}
@@ -45,5 +45,9 @@ public class University {
 		this.uf = uf;
 	}
 	
+	@Override
+	public String toString() {
+		return "ID: " + id + ", Name: " + name + ", UF: " + uf;
+	}
 	
 }

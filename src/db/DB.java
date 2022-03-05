@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -35,6 +36,18 @@ public class DB {
 				throw new DBException("Error in closeConnection: " + e.getMessage());
 			}
 		}
+	}
+	
+	public static void closePreparedStatement(PreparedStatement ps) {
+		if(ps != null) {
+			try {
+			ps.close();
+			}
+			catch(SQLException e) {
+				throw new DBException("Error in closePreparedStatement: " + e.getMessage());
+			}
+		}
+		
 	}
 	
 	private static Properties getProperties() {
