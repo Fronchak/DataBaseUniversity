@@ -12,6 +12,7 @@ import db.DBException;
 import model.dao.StudentDao;
 import model.entities.Student;
 import model.entities.University;
+import model.util.ImplementsEntities;
 
 public class StudentDaoJDBC implements StudentDao {
 
@@ -62,9 +63,39 @@ public class StudentDaoJDBC implements StudentDao {
 	}
 
 	@Override
-	public Student findById(Student student) {
-		// TODO Auto-generated method stub
-		return null;
+	public Student findById(Integer id) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("SELECT "
+					+ "A.IDALUNO, "
+					+ "A.NOME, "
+					+ "A.CPF, "
+					+ "A.DATA_DE_NASCIMENTO, "
+					+ "F.IDFACULDADE, "
+					+ "F.NOME,"
+					+ "F.UF "
+					+ "FROM ALUNO A "
+					+ "INNER JOIN FACULDADE F "
+					+ "ON A.ID_FACULDADE = F.IDFACULDADE "
+					+ "WHERE IDALUNO = ?");
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				University obj =ImplementsEntities.implementUniversity(rs);
+				return ImplementsEntities.implementStudent(rs, obj);
+			}
+			else {
+				throw new DBException("Can't find any student with this id: " + id);
+			}
+		}
+		catch(SQLException e) {
+			throw new DBException("Error in find Student: " + e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closePreparedStatement(ps);
+		}
 	}
 
 	@Override

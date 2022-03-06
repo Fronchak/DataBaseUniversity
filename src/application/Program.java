@@ -19,18 +19,20 @@ public class Program {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			UniversityDao universityDao = DaoFactory.getUniversityDao();
 			StudentDao studentDao = DaoFactory.getStudentDao();
+			/*
 			University uni = universityDao.findById(2);
 			Student student = new Student("Alice Fronchak","63802082915",sdf.parse("05/10/2000"),uni);
 			System.out.println("Before insert: " + student);
 			studentDao.insert(student);
-			System.out.println("After isert:" + student);
+			System.out.println("After insert:" + student);
+			*/
+			Student student = studentDao.findById(5);
+			System.out.println(student);
+			
 			
 		}
 		catch(DBException e) {
 			System.out.println(e.getMessage());
-		}
-		catch(ParseException e) {
-			System.out.println("Invalid input format!");
 		}
 		finally {
 			DB.closeConnection();

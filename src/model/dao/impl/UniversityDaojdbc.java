@@ -73,10 +73,10 @@ public class UniversityDaoJDBC implements UniversityDao{
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement("SELECT "
-					+ "IDFACULDADE, "
-					+ "NOME, "
-					+ "UF "
-					+ "FROM FACULDADE "
+					+ "F.IDFACULDADE, "
+					+ "F.NOME, "
+					+ "F.UF "
+					+ "FROM FACULDADE F "
 					+ "WHERE IDFACULDADE = ?");
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
@@ -104,10 +104,10 @@ public class UniversityDaoJDBC implements UniversityDao{
 		List<University> list = new ArrayList<>();	
 		try {
 			ps = conn.prepareStatement("SELECT "
-					+ "IDFACULDADE, "
-					+ "NOME, "
-					+ "UF "
-					+ "FROM FACULDADE");
+					+ "F.IDFACULDADE, "
+					+ "F.NOME, "
+					+ "F.UF "
+					+ "FROM FACULDADE F");
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				list.add(ImplementsEntities.implementUniversity(rs));

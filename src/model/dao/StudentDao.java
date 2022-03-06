@@ -11,7 +11,7 @@ public interface StudentDao {
 	
 	void update(Student student);
 	
-	Student findById(Student student);
+	Student findById(Integer id);
 	
 	List<Student> findByUniversity(University university);
 	
