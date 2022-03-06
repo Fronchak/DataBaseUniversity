@@ -1,11 +1,15 @@
 package model.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class University {
 
 	private Integer id;
 	private String name;
 	private String uf;
 
+	List<Student> list = new ArrayList<>();
 	
 	public University(){
 	}
@@ -43,6 +47,15 @@ public class University {
 
 	public void setUf(String uf) {
 		this.uf = uf;
+	}
+	
+	public void addStudent(Student student) {
+		list.add(student);
+	}
+	
+	public void printList() {
+		System.out.println("UNIVERSITY: " + name);
+		list.stream().forEach(System.out::println);
 	}
 	
 	@Override

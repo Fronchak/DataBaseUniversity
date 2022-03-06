@@ -1,11 +1,15 @@
 package model.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
@@ -58,8 +62,31 @@ public class StudentDaoJDBC implements StudentDao {
 
 	@Override
 	public void update(Student student) {
-		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
 		
+		try {
+			ps = conn.prepareStatement("UPDATE ALUNO SET "
+					+ "NOME = ?, "
+					+ "CPF = ?, "
+					+ "DATA_DE_NASCIMENTO = ?, "
+					+ "ID_FACULDADE = ? "
+					+ "WHERE IDALUNO = ?");
+			ps.setString(1, student.getName());
+			ps.setString(2, student.getCpf());
+			ps.setDate(3, new java.sql.Date(student.getBirthDate().getTime()));
+			ps.setInt(4, student.getUniversity().getId());
+			ps.setInt(5, student.getId());
+			int rowsAffect = ps.executeUpdate();
+			if(rowsAffect == 0) {
+				throw new DBException("Unable to find student with this id: " + student.getId());
+			}	
+		}
+		catch(SQLException e) {
+			throw new DBException("Error in update student: " + e.getMessage());
+		}
+		finally {
+			DB.closePreparedStatement(ps);
+		}
 	}
 
 	@Override
@@ -100,14 +127,63 @@ public class StudentDaoJDBC implements StudentDao {
 
 	@Override
 	public List<Student> findByUniversity(University university) {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Student> list = new ArrayList<>();
+
+			return null;	
 	}
 
 	@Override
 	public List<Student> getAllStudents() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Student> list = new ArrayList<>();
+		List<University> list2 = new ArrayList<>();
+		Map<Integer, University> map = new HashMap<>();
+		
+		try {
+			ps = conn.prepareStatement("SELECT "
+					+ "A.IDALUNO, "
+					+ "A.NOME, "
+					+ "A.CPF, "
+					+ "A.DATA_DE_NASCIMENTO, "
+					+ "F.IDFACULDADE, "
+					+ "F.NOME, "
+					+ "F.UF "
+					+ "FROM ALUNO A "
+					+ "INNER JOIN FACULDADE F "
+					+ "ON A.ID_FACULDADE = F.IDFACULDADE");
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				
+				University uni = map.get(rs.getInt("F.IDFACULDADE"));
+				
+				if(uni == null) {
+					uni = ImplementsEntities.implementUniversity(rs);
+					map.put(rs.getInt("F.IDFACULDADE"), uni);
+					list2.add(uni);
+				}
+				Student st = ImplementsEntities.implementStudent(rs, uni);
+				list.add(st);
+				uni.addStudent(st);
+			}
+			System.out.println("PRINT LIST OF UNIVERSITIES: ");
+			for(University univ : list2) {
+				
+				univ.printList();
+			}
+			System.out.println("END");
+			return list;
+		}
+		catch(SQLException e) {
+			throw new DBException("Error in getAllStudents: " + e.getMessage());
+		}
+		finally {
+			DB.closeResultSet(rs);
+			DB.closePreparedStatement(ps);
+		}
 	}
 
 	@Override
