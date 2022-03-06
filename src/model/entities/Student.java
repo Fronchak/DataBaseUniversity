@@ -1,9 +1,12 @@
 package model.entities;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Student {
 
+	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	
 	private Integer id;
 	private String name;
 	private String cpf;
@@ -72,7 +75,7 @@ public class Student {
 	
 	@Override
 	public String toString() {
-		return  "ID: " + id + ", Name: " + name + ", CPF: " + cpf + ", Birth Date: " + birthDate + 
+		return  "ID: " + id + ", Name: " + name + ", CPF: " + cpf + ", Birth Date: " + sdf.format(birthDate) + 
 				", University: " + university;
 	}
 }
